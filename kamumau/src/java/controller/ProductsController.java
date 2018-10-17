@@ -7,6 +7,8 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author x201
  */
-@WebServlet(name = "ProductsController", urlPatterns = {"/ProductsController"})
+@WebServlet(name = "ProductsController", urlPatterns = {"/Products"})
 public class ProductsController extends HttpServlet {
 
     /**
@@ -33,16 +35,30 @@ public class ProductsController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ProductsController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ProductsController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+                String action = request.getParameter("action");
+            if(action==null){
+                action= "list";
+            }
+            switch (action) {
+                case "new":
+                    showNewForm(request, response);
+                    break;
+                case "create":
+                    createProduct(request, response);
+                    break;
+                case "delete":
+                    deleteProduct(request, response);
+                    break;
+                case "edit":
+                    showEditForm(request, response);
+                    break;
+                case "update":
+                    updateProduct(request, response);
+                    break;
+                default:
+                    listProduct(request, response);
+                    break;
+            }
         }
     }
 
@@ -84,5 +100,35 @@ public class ProductsController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void showNewForm(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("products/new.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void createProduct(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void deleteProduct(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void showEditForm(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("products/edit.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void updateProduct(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void listProduct(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("products/list.jsp");
+        dispatcher.forward(request, response);
+    }
 
 }
