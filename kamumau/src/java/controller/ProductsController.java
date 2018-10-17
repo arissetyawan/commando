@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author x201
  */
-@WebServlet(name = "ProductsController", urlPatterns = {"/Products"})
 public class ProductsController extends HttpServlet {
 
     /**

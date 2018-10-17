@@ -54,19 +54,16 @@
                         <div class="form-group row">
                           <div class="col-sm-10 offset-sm-2">
                             <button type="submit" class="btn btn-success">
-                                Save
-                            </button>
+                                Update
+                            </button> &nbsp;
+                            <a href="javascript:void(0)" class="btn btn-danger">
+                                Hapus ?
+                            </a>
                           </div>
                         </div>
                       </form>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-4">
-                <p>system will reject removol for any product which alredy have 
-                    on order.<br> It means yours code has to find to all order 
-                    at the frist before remaval.
-            </p>
             </div>
         </div>
     </div>
