@@ -26,12 +26,17 @@ public class Order extends MyConnection{
     public int user_id;
     public Date created_at;
     public Date updated_at;
-    private String status="new";
-
+    private String status;
+    protected String address;
+    protected String name;
+    protected float price;
+    protected int buyer_id;
+    
     /* this constructor defined 
        this class to have same behaviour with it parents
     etc
     */
+    
     public Order() {
         super();
     }
@@ -63,13 +68,13 @@ public class Order extends MyConnection{
         Date date= new Date();
         return String.format("%1$tY-%1$tm-%1$td", date);
     }
-
     private int generateNo(){
         return (int) System.currentTimeMillis();
     }
     public void setNo(int no) {
         this.no = no;
     }
+    
     public void setCreatedAt(Date date){
         this.created_at= date;
     }
@@ -77,18 +82,62 @@ public class Order extends MyConnection{
         this.updated_at= date;
     }
 
-    public ArrayList<Order> all(int user_id){
-        String query = "SELECT * FROM " + tableName  + "WHERE user_id = " + user_id;
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public String getAddress() {
+        return address;
+    }
+    public void setAdress(String address) {
+        this.address = address;
+    }
+    
+    public float getPrice() {
+        return price;
+    }
+    public void setPrice(float price) {
+        this.price = price;
+    }
+    
+    
+    
+    
+    
+    public ArrayList<Order> all(){
+        
+        String query = "SELECT * FROM " + tableName;
         ArrayList<Order> orders = new ArrayList<>();
         try {
             Statement stmt = this.conn().createStatement();
             ResultSet res = stmt.executeQuery(query);
             while (res.next()) {
                 Order order = new Order();
-                order.setNo(res.getInt("no"));
-                order.setCreatedAt(res.getDate("created_at"));
-                order.setUpdatedAT(res.getDate("updated_at"));
-                order.setId(res.getInt("id"));
+                order.setNo(res.getInt("id"));
+              order.setId(res.getInt("buyer_id"));
+               order.setName(res.getString("name"));
+               order.setAdress(res.getString("address"));
+            order.setPrice(res.getFloat("price"));
+               int a = res.getInt("status");
+               if(a==1)
+               {
+                  order.setStatus("new");
+               }
+               else if (a==2)
+               {
+                   order.setStatus("paid");
+               }
+               else if(a==3)
+               {
+                   order.setStatus("delivered");
+               }
+             order.setCreatedAt( res.getDate("created_at"));
+               order.setUpdatedAT( res.getDate("updated_at"));
+               
+                
                 orders.add(order);
             }
         } catch (SQLException e) {

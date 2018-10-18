@@ -7,17 +7,19 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.List;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Order;
 
 /**
  *
  * @author x201
  */
-@WebServlet(name = "Orders", urlPatterns = {"/Orders"})
 public class OrdersController extends HttpServlet {
 
     /**
@@ -29,23 +31,50 @@ public class OrdersController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Orders</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Orders at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            try (PrintWriter out = response.getWriter()) {
+                String action = request.getParameter("action");
+                if(action==null){
+                    action= "list";
+                }
+                try {
+                    switch (action) {
+                    case "new":
+                        break;
+                    case "create":
+                        break;
+                    case "delete":
+                        break;
+                    case "edit":
+                        editOrders(request, response);
+                        break;
+                    case "update":
+                        break;
+                    default:
+                        listOrders(request, response);
+                        break;
+                    }
+                } 
+            catch (SQLException ex) {
+                throw new ServletException(ex);
+            }
         }
     }
 
+    
+    private void listOrders(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+          Order o= new Order();
+        List<Order> order = o.all();
+        request.setAttribute("order", order);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("orders/list.jsp");
+        dispatcher.forward(request, response);
+    }
+        
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -84,5 +113,9 @@ public class OrdersController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+    private void editOrders(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("orders/edit.jsp");
+        dispatcher.forward(request, response);
+    }
 }
