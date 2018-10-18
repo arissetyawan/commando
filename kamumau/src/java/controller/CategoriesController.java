@@ -21,6 +21,11 @@ import model.Category;
  * @author x201
  */
 public class CategoriesController extends HttpServlet {
+    private final static String add_action = "new";
+    private final static String delete_action = "delete";
+    private final static String edit_action = "edit";
+    private final static String list_action = "list";
+    private String message= "";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -73,43 +78,41 @@ public class CategoriesController extends HttpServlet {
         dispatcher.forward(request, response);
         
     }
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    
+     private void createCategories(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        String id = request.getParameter("id");
+        String name = request.getParameter("name");
+        String category_id = request.getParameter("category_id");
+ 
+        Category category = new Category();
+        category.setId(id);
+        category.setName(name);
+        category.setParentId(category_id);
+        if (category.create()){
+            String message = "new person added";                    
+            request.setAttribute("message", message);
+            response.sendRedirect("categories?action="+list_action);
+        }
+        else{
+            String message = "new category failed to add";
+            request.setAttribute("message", message);
+            String add_action = null;
+            request.getRequestDispatcher("categories?action="+add_action).include(request, response);
+        }
     }
+     private void showNewForm(HttpServletRequest request, HttpServletResponse response)
+                throws ServletException, IOException {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("categories/new.jsp");
+            dispatcher.forward(request, response);
+     }
+      private void showEditForm(HttpServletRequest request, HttpServletResponse response)
+                throws ServletException, IOException {
+            Category category= new Category();
+            int id = Integer.parseInt(request.getParameter("id"));
+            request.setAttribute("category", category.find(id));
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+            RequestDispatcher dispatcher = request.getRequestDispatcher("categories/edit.jsp");
+            dispatcher.forward(request, response);
+        }
 }
