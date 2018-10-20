@@ -8,18 +8,22 @@
 
 <main style="margin-top:7%;margin-bottom:7%;">
     <div class="container">
+        <h4><c:out value='${message}' /></h4>
         <div class="col-sm-8">
             <div class="card">
                 <div class="card-header">Add New Product</div>
                 <div class="card-body">
-                    <form>
+                    <form method="post" action="/kamumau/products?action=create">
                     <div class="form-group row">
                       <label for="category" class="col-sm-2 col-form-label">
                           Category
                       </label>
                       <div class="col-sm-10">
-                          <select class="form-control">
+                          <select class="form-control" name="category">
                               <option value="">Please select categories</option>
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
                           </select>
                       </div>
                     </div>
@@ -57,7 +61,7 @@
                         </button>
                       </div>
                     </div>
-                  </form>
+                    </form>
                 </div>
             </div>
         </div>

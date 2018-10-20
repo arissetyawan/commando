@@ -8,7 +8,13 @@
 
 <main style="margin-top:7%;margin-bottom:7%;">
     <div class="container">
+        <h4 style="background-color: yellow;">
+            <c:out value='${message}' />
+        </h4>
         <div class="row">
+            <a href="products?action=new" class="btn btn-success">
+                <i class="fa fa-plus"></i> Add Product
+            </a>&nbsp;
             <button class="btn btn-primary">My Products</button> &nbsp;            
             <button class="btn btn-danger">Out of Stock Products</button>
         </div>
@@ -25,30 +31,21 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Laptop Apple 12 Inc</td>
-                <td>12.000.000</td>
-                <td>10</td>
-                <td>Sep 3 2018</td>
-                <td class="text-center">
-                    <a href="javascript:void(0)" class="btn btn-info btn-sm">
-                        <i class="fa fa-eye"></i> Detail
-                    </a>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Mouse X-Gen</td>
-                <td>900.000</td>
-                <td>100</td>
-                <td>Sep 3 2018</td>
-                <td class="text-center">
-                    <a href="javascript:void(0)" class="btn btn-info btn-sm">
-                        <i class="fa fa-eye"></i> Detail
-                    </a>
-                </td>
-              </tr>
+              <c:forEach var="products" items="${products}">
+                  <tr>
+                    <th scope="row">${products.id}</th>
+                    <td>${products.name}</td>
+                    <td>${products.price}</td>
+                    <td>${products.stock}</td>
+                    <td>${products.updated_at}</td>
+                    <td class="text-center">
+                        <a href="products?action=edit&id=<c:out value='${products.getId()}' />" 
+                           class="btn btn-info btn-sm">
+                            <i class="fa fa-eye"></i> Detail
+                        </a>
+                    </td>
+                  </tr>
+              </c:forEach>
             </tbody>
           </table>
     </div>

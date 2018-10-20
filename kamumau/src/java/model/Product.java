@@ -5,17 +5,169 @@
  */
 package model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
 /**
- *CREATE TABLE orders (
-    id int NOT NULL AUTO_INCREMENT,
-    no varchar(10) NOT NULL,
-    user_id int NOT NULL.
-    created_at DATE NOT NULL,
-    updated_at DATE NOT NULL,
-    PRIMARY KEY (id)
-);
- * @author x201
+ * @author fredd
  */
-public class Product {
+public class Product extends MyConnection{
+    private final String tableName= "products";
+    public int id, user_id, price, stock, category_id;
+    public String name;
+    public String created_at, updated_at;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public int getCategory_id() {
+        return category_id;
+    }
+
+    public void setCategory_id(int category_id) {
+        this.category_id = category_id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
+    }
+
+    public String getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(String updated_at) {
+        this.updated_at = updated_at;
+    }
+    
+    private boolean validate(){
+        boolean status= false;
+        if (!"".equals(this.name) &&  !"".equals(this.price) 
+                &&  !"".equals(this.stock) &&  !"".equals(this.category_id)){
+            status= true;
+        } 
+        return status;
+    }
+    
+    public boolean create() {
+        boolean result;
+        if(!validate()){
+            return false;
+        }
+        String query = "INSERT INTO "+ tableName +
+                "(user_id, name, price, stock, category_id) "
+                + "values ('" + this.user_id + "', '" + this.name + "', '" 
+                + this.price + "', '" + this.stock + "', '" + this.category_id + "')";
+        try {
+            result = this.stateOpen().executeUpdate(query) > 0;
+            this.stateClose();
+            return result;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+    
+    public ArrayList<Product> all(){
+        String query = "SELECT * FROM " + tableName;
+        ArrayList<Product> products = new ArrayList<>();
+        try {
+            Statement stmt = this.conn().createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            while (res.next()) {
+                Product product = new Product();
+                product.setId(res.getInt("id"));
+                product.setUser_id(res.getInt("user_id"));
+                product.setName(res.getString("name"));
+                product.setPrice(res.getInt("price"));
+                product.setStock(res.getInt("stock"));
+                product.setCategory_id(res.getInt("category_id"));
+                product.setUpdated_at(res.getString("updated_at"));
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return products;
+    }
+
+    public Object find(int id) {
+        Product product = new Product();
+        String query = "SELECT * FROM " + tableName + " WHERE id = " + id + " ";
+        try {
+            Statement stmt = this.conn().createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            if (res.next()) {
+                product.setName(res.getString("name"));
+                product.setPrice(res.getInt("price"));
+                product.setStock(res.getInt("stock"));
+                product.setCategory_id(res.getInt("category_id"));
+                product.setId(res.getInt("id"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return product;
+    }
+
+    public boolean update() {
+        if(!validate()){
+            return false;
+        }
+        String query = "UPDATE "+ tableName + " SET category_id='"
+                + this.category_id +"', name='"+ this.name + "', price='" 
+                + this.price + "', stock='" + this.stock + "' WHERE id ='" 
+                + this.id + "'";
+        try {
+            Statement stmt = this.conn().createStatement();
+            return stmt.executeUpdate(query) > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
     
 }
