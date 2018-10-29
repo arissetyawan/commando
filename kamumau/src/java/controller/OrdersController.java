@@ -68,8 +68,16 @@ public class OrdersController extends HttpServlet {
     private void listOrders(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
           Order o= new Order();
-        List<Order> order = o.all();
-        request.setAttribute("order", order);
+        List<Order> orders = o.all();
+        request.setAttribute("orders", orders);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("orders/list.jsp");
+        dispatcher.forward(request, response);
+    }
+        private void listComplete(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+          Order o= new Order();
+        List<Order> orders = o.complete();
+        request.setAttribute("orders", orders);
         RequestDispatcher dispatcher = request.getRequestDispatcher("orders/list.jsp");
         dispatcher.forward(request, response);
     }
@@ -115,6 +123,10 @@ public class OrdersController extends HttpServlet {
     }// </editor-fold>
     private void editOrders(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
+         Order o = new Order();
+        int no = Integer.parseInt(request.getParameter("no"));
+        List<Order> orders = o.find(no);
+         request.setAttribute("orders", orders);
         RequestDispatcher dispatcher = request.getRequestDispatcher("orders/edit.jsp");
         dispatcher.forward(request, response);
     }

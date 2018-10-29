@@ -5,6 +5,7 @@
 --%>
 
 <%@include file= "/layouts/header.jsp" %>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <style><%@include file="/orders/style.css"%></style>
 <html>
     
@@ -21,31 +22,27 @@
 <table style="position:relative;" class="highlight">
         <thead>
           <tr>
+               
           <th style=" border-right:1px solid #bbb;" data-field="id">ID</th>
-              <th style=" border-right:1px solid #bbb;" data-field="no">No.</th>
-              <th style=" border-right:1px solid #bbb;" data-field="name">Customer Name</th>
-              <th style="width: 20%; border-right:1px solid #bbb;" data-field="address">Address</th>
+              <th style=" border-right:1px solid #bbb;" data-field="no">Name</th>
+              <th style=" border-right:1px solid #bbb;" data-field="name">Price</th>
+              <th style="width: 20%; border-right:1px solid #bbb;" data-field="address">QTY</th>
               <th style=" border-right:1px solid #bbb;" data-field="address">Total</th>
-              <th style=" border-right:1px solid #bbb;" data-field="date">Created At</th>
-              <th style=" border-right:1px solid #bbb;" data-field="status">Status</th>
-              <th style=" width: 25%;border-right:1px solid #bbb;" colspan="2" data-field="action">Action</th>
+              <th style=" border-right:1px solid #bbb;" data-field="action">Action</th>
           </tr>
         </thead>
  <c:forEach var="orders" items="${orders}">
                                 <tr>
-     <td><c:out value="${order.no}" /></td>
- <td><c:out value="${orders.id}" /></td>
+     <td><c:out value="${orders.id}" /></td>
  <td><c:out value="${orders.name}" /></td>
- <td><c:out value="${orders.address}" /></td>
  <td><c:out value="${orders.price}" /></td>
- <td><c:out value="${orders.status}" /></td>
- <td><c:out value="${orders.created_at}" /></td>
+ <td><c:out value="${orders.QTY}" /></td>
+ <td><c:out value="${orders.QTY * orders.price}"/></td>
  
-                        <td style="text-align: center;"  >
-                        <a   href="orders?action=edit&id=<c:out value='${order.getId()}' />"><i class="material-icons">visibility</i></a>
-                   </td>
+ 
+
                     <td style="text-align: center;">       
-                        <a style="color: red;" href="orders?action=delete&id=<c:out value='${order.getId()}' />" onclick="return confirm('Are you sure?')" ><i class="material-icons">delete</i></a>                                          
+                        <a style="color: red;" href="orders?action=delete&id=<c:out value='${orders.getNo()}' />" onclick="return confirm('Are you sure?')" ><i style="position:absolute;top:50%;left:90%;font-size:30px;" class="material-icons">delete</i></a>                                          
                     </td>  
             </tr>
          </c:forEach>

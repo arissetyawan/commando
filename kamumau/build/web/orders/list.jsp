@@ -20,7 +20,7 @@
   <button class="tablinks" onclick="openCity(event, 'Incoming')" id="defaultOpen">Incoming Orders</button>
   <button class="tablinks" onclick="openCity(event, 'Complete')">Complete Orders</button> 
 </div>
-    <div style="height: 20%;" id="Incoming" class="tabcontent">
+    <div style="height: 20%;" id="Complete" class="tabcontent">
     <hr> 
     <div>
 <table style="position:relative;" class="highlight">
@@ -36,12 +36,29 @@
               <th style=" width: 25%;border-right:1px solid #bbb;" colspan="2" data-field="action">Action</th>
           </tr>
         </thead>
-
+ <c:forEach var="orders" items="${orders}">
+                                <tr>
+     <td><c:out value="${orders.id}" /></td>
+ <td><c:out value="${orders.no}" /></td>
+ <td><c:out value="${orders.csname}" /></td>
+ <td><c:out value="${orders.address}" /></td>
+ <td><c:out value="${orders.price}" /></td>
+ <td><c:out value="${orders.status}" /></td>
+ <td><c:out value="${orders.created_at}" /></td>
+ 
+                        <td style="text-align: center;"  >
+                        <a   href="orders?action=edit&no=<c:out value='${orders.getNo()}' />"><i class="material-icons">visibility</i></a>
+                   </td>
+                    <td style="text-align: center;">       
+                        <a style="color: red;" href="orders?action=delete&no=<c:out value='${orders.getNo()}' />" onclick="return confirm('Are you sure?')" ><i class="material-icons">delete</i></a>                                          
+                    </td>  
+            </tr>
+         </c:forEach>
       </table>
 </div>
 </div>
 
-<div id="Complete" class="tabcontent">
+<div id="Incoming" class="tabcontent">
 <div>
     <hr>
     <br>
@@ -62,19 +79,19 @@
         </thead>
               <c:forEach var="orders" items="${orders}">
                                 <tr>
-     <td><c:out value="${order.no}" /></td>
- <td><c:out value="${orders.id}" /></td>
- <td><c:out value="${orders.name}" /></td>
+     <td><c:out value="${orders.id}" /></td>
+ <td><c:out value="${orders.no}" /></td>
+ <td><c:out value="${orders.csname}" /></td>
  <td><c:out value="${orders.address}" /></td>
  <td><c:out value="${orders.price}" /></td>
  <td><c:out value="${orders.status}" /></td>
  <td><c:out value="${orders.created_at}" /></td>
  
                         <td style="text-align: center;"  >
-                        <a   href="orders?action=edit&id=<c:out value='${order.getId()}' />"><i class="material-icons">visibility</i></a>
+                        <a   href="orders?action=edit&no=<c:out value='${orders.getNo()}' />"><i class="material-icons">visibility</i></a>
                    </td>
                     <td style="text-align: center;">       
-                        <a style="color: red;" href="orders?action=delete&id=<c:out value='${order.getId()}' />" onclick="return confirm('Are you sure?')" ><i class="material-icons">delete</i></a>                                          
+                        <a style="color: red;" href="orders?action=delete&no=<c:out value='${orders.getNo()}' />" onclick="return confirm('Are you sure?')" ><i class="material-icons">delete</i></a>                                          
                     </td>  
             </tr>
          </c:forEach>
