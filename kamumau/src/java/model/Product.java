@@ -112,7 +112,9 @@ public class Product extends MyConnection{
     }
     
     public ArrayList<Product> all(){
-        String query = "SELECT * FROM " + tableName;
+        String query = "SELECT products.*, categories.name AS category_name "
+                + "FROM "+tableName+" LEFT JOIN categories "
+                + "ON categories.id = products.category_id";
         ArrayList<Product> products = new ArrayList<>();
         try {
             Statement stmt = this.conn().createStatement();

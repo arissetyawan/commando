@@ -18,13 +18,13 @@
       <li class="nav-item dropdown active">
         <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Categories</a>
         <div class="dropdown-menu" aria-labelledby="dropdown01">
-          <a class="dropdown-item" href="#">Category A</a>
-          <a class="dropdown-item" href="#">Category B</a>
-          <a class="dropdown-item" href="#">Category C</a>
+          <a class="dropdown-item" href="categories/list.jsp">Data Category</a>
+          <a class="dropdown-item" href="categories/add.jsp">Add category</a>
+          <a class="dropdown-item" href="categories/edit.jsp">Edit category</a>
         </div>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="products">Products</a>
+        <a class="nav-link" href="#">Products</a>
       </li>
       <li class="nav-item active">
         <a class="nav-link" href="#">Sign In</a>

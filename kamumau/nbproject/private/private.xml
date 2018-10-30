@@ -4,13 +4,12 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/Users/fredd/NetBeansProjects/commando/kamumau/src/java/controller/UsersController.java</file>
-            <file>file:/Users/fredd/NetBeansProjects/commando/kamumau/web/people/edit.jsp</file>
+            <file>file:/Users/fredd/NetBeansProjects/commando/kamumau/src/java/controller/HomeController.java</file>
             <file>file:/Users/fredd/NetBeansProjects/commando/kamumau/src/java/controller/ProductsController.java</file>
-            <file>file:/Users/fredd/NetBeansProjects/commando/kamumau/web/people/new.jsp</file>
-            <file>file:/Users/fredd/NetBeansProjects/commando/kamumau/web/products/edit.jsp</file>
-            <file>file:/Users/fredd/NetBeansProjects/commando/kamumau/src/java/controller/PeopleController.java</file>
-            <file>file:/Users/fredd/NetBeansProjects/commando/kamumau/web/people/form.html</file>
-            <file>file:/Users/fredd/NetBeansProjects/commando/kamumau/src/java/model/Person.java</file>
+            <file>file:/Users/fredd/NetBeansProjects/commando/kamumau/web/WEB-INF/web.xml</file>
+            <file>file:/Users/fredd/NetBeansProjects/commando/kamumau/src/java/controller/OrdersController.java</file>
+            <file>file:/Users/fredd/NetBeansProjects/commando/kamumau/web/products/list.jsp</file>
+            <file>file:/Users/fredd/NetBeansProjects/commando/kamumau/web/products/search.jsp</file>
             <file>file:/Users/fredd/NetBeansProjects/commando/kamumau/src/java/model/Product.java</file>
         </group>
     </open-files>

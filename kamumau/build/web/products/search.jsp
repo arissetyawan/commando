@@ -10,63 +10,23 @@
     <div class="container">
         <h3>Products</h3><br>
         <div class="row">
-            <div class="col-sm-4" style="margin-bottom:20px;">
-                <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title">Laptop Acer 17 inch</h5>
-                      <h6 class="card-subtitle mb-2 text-muted">Seller : Acer Indonesia</h6>
-                      <p class="card-text">Category : Laptop</p>
-                      <a href="#" class="card-link">Rp 10.000.000</a>
-                      <a href="#" class="btn btn-success btn-sm float-right">
-                          <i class="fa fa-shopping-cart"></i> 
-                          Buy
-                      </a>
+            <c:forEach var="products" items="${products}">
+                <div class="col-sm-4" style="margin-bottom:20px;">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${products.name}</h5>
+                            <p class="card-text">
+                                Category : ${products.category_name}
+                            </p>
+                          <a href="#" class="card-link">Rp ${products.price}</a>
+                          <a href="#" class="btn btn-success btn-sm float-right">
+                              <i class="fa fa-shopping-cart"></i> 
+                              Buy
+                          </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-4" style="margin-bottom:20px;">
-                <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title">Laptop Acer 17 inch</h5>
-                      <h6 class="card-subtitle mb-2 text-muted">Seller : Acer Indonesia</h6>
-                      <p class="card-text">Category : Laptop</p>
-                      <a href="#" class="card-link">Rp 10.000.000</a>
-                      <a href="#" class="btn btn-success btn-sm float-right">
-                          <i class="fa fa-shopping-cart"></i> 
-                          Buy
-                      </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4" style="margin-bottom:20px;">
-                <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title">Laptop Acer 17 inch</h5>
-                      <h6 class="card-subtitle mb-2 text-muted">Seller : Acer Indonesia</h6>
-                      <p class="card-text">Category : Laptop</p>
-                      <a href="#" class="card-link">Rp 10.000.000</a>
-                      <a href="#" class="btn btn-success btn-sm float-right">
-                          <i class="fa fa-shopping-cart"></i> 
-                          Buy
-                      </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4" style="margin-bottom:20px;">
-                <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title">Laptop Acer 17 inch</h5>
-                      <h6 class="card-subtitle mb-2 text-muted">Seller : Acer Indonesia</h6>
-                      <p class="card-text">Category : Laptop</p>
-                      <a href="#" class="card-link">Rp 10.000.000</a>
-                      <a href="#" class="btn btn-success btn-sm float-right">
-                          <i class="fa fa-shopping-cart"></i> 
-                          Buy
-                      </a>
-                    </div>
-                </div>
-            </div>
-            
+            </c:forEach>
         </div>
     </div>
 </main>

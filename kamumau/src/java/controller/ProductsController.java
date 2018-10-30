@@ -192,10 +192,8 @@ public class ProductsController extends HttpServlet {
     private void listProduct(HttpServletRequest request, HttpServletResponse response)
         throws SQLException, IOException, ServletException {
         Product p = new Product();
-        int no = 1;
         List<Product> products = p.all();
         request.setAttribute("products", products);
-        request.setAttribute("no", no);
         RequestDispatcher dispatcher = request.getRequestDispatcher("products/list.jsp");
         dispatcher.forward(request, response);
     }
