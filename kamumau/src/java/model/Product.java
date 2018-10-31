@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class Product extends MyConnection{
     private final String tableName= "products";
     public int id, user_id, price, stock, category_id;
-    public String name;
+    public String name, categoryName;
     public String created_at, updated_at;
 
     public int getId() {
@@ -65,6 +65,14 @@ public class Product extends MyConnection{
 
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public String getCreated_at() {
@@ -127,6 +135,7 @@ public class Product extends MyConnection{
                 product.setPrice(res.getInt("price"));
                 product.setStock(res.getInt("stock"));
                 product.setCategory_id(res.getInt("category_id"));
+                product.setCategoryName(res.getString("category_name"));
                 product.setUpdated_at(res.getString("updated_at"));
                 products.add(product);
             }
@@ -135,6 +144,34 @@ public class Product extends MyConnection{
         }
         return products;
     }
+    
+    public ArrayList<Product> findProduct(String key){
+        String query = "SELECT products.*, categories.name AS category_name "
+                + "FROM "+tableName+" LEFT JOIN categories "
+                + "ON categories.id = products.category_id "
+                + "WHERE products.name like '%"+key+"%'";
+        ArrayList<Product> products = new ArrayList<>();
+        try {
+            Statement stmt = this.conn().createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            while (res.next()) {
+                Product product = new Product();
+                product.setId(res.getInt("id"));
+                product.setUser_id(res.getInt("user_id"));
+                product.setName(res.getString("name"));
+                product.setPrice(res.getInt("price"));
+                product.setStock(res.getInt("stock"));
+                product.setCategory_id(res.getInt("category_id"));
+                product.setCategoryName(res.getString("category_name"));
+                product.setUpdated_at(res.getString("updated_at"));
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return products;
+    }
+    
 
     public Object find(int id) {
         Product product = new Product();

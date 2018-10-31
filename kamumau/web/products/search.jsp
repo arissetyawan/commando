@@ -16,13 +16,16 @@
                         <div class="card-body">
                             <h5 class="card-title">${products.name}</h5>
                             <p class="card-text">
-                                Category : 
+                                Category : ${products.categoryName}
                             </p>
-                          <a href="#" class="card-link">Rp ${products.price}</a>
-                          <a href="#" class="btn btn-success btn-sm float-right">
-                              <i class="fa fa-shopping-cart"></i> 
-                              Buy
-                          </a>
+                          <a href="javascript:void(0)" class="card-link">Rp ${products.price}</a>
+                          <form method="post" action="#">
+                              <input type="hidden" name="id_product" value="${products.id}">
+                            <button type="submit" class="btn btn-success btn-sm float-right">
+                                <i class="fa fa-shopping-cart"></i> 
+                                Buy
+                            </button>
+                          </form>
                         </div>
                     </div>
                 </div>

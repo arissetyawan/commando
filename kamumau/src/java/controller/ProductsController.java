@@ -8,6 +8,7 @@ package controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -61,6 +62,9 @@ public class ProductsController extends HttpServlet {
                         break;
                     case "list":
                         listProduct(request, response);
+                        break;
+                    case "search":
+                        searchProduct(request, response);
                         break;
                     default:
                         searchProduct(request, response);
@@ -200,8 +204,15 @@ public class ProductsController extends HttpServlet {
 
     private void searchProduct(HttpServletRequest request, HttpServletResponse response) 
         throws ServletException, IOException {
+        String key = request.getParameter("key");
         Product p = new Product();
-        List<Product> products = p.all();
+        List<Product> products = new ArrayList<>();
+        if(key==null){
+            products = p.all();
+        } else{
+            products = p.findProduct(key);
+        }
+        
         request.setAttribute("products", products);
         RequestDispatcher dispatcher = request.getRequestDispatcher("products/search.jsp");
         dispatcher.forward(request, response);
