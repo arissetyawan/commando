@@ -176,20 +176,16 @@ public class ProductsController extends HttpServlet {
         product.setCategory_id(category_id);
         product.setPrice(price);
         product.setStock(stock);
+        
         if (product.update()){
-            message= "product updated";     
+            message = "product updated";                    
             request.setAttribute("message", message);
-            List<Product> products = product.all();
-            request.setAttribute("products", products);
-//            request.getRequestDispatcher("/products/list.jsp").include(request, response);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("products?action=list");
-            dispatcher.forward(request, response);
+            response.sendRedirect("products?action=list");
         }
         else{
-            message= "product failed to updated";     
+            message= "product failed to updated";
             request.setAttribute("message", message);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("products?action=edit");
-            dispatcher.forward(request, response);
+            request.getRequestDispatcher("products?action=edit&id="+id).include(request, response);
         }
     }
 

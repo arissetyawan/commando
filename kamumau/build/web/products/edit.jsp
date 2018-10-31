@@ -21,7 +21,7 @@
                               Category
                           </label>
                           <div class="col-sm-10">
-                              <select class="form-control" name="category">
+                              <select class="form-control" name="category" required>
                                   <option value="">Please select categories</option>
                                   <option value="1"
                                         <c:if test="${product.getCategory_id() == 1}">
@@ -50,7 +50,7 @@
                           </label>
                           <div class="col-sm-10">
                             <input type="text" class="form-control" id="name" 
-                                   name="name" placeholder="Input Your Name"
+                                   name="name" placeholder="Input Your Name" required
                                    value="<c:out value='${product.getName()}' />">
                           </div>
                         </div>
@@ -60,7 +60,7 @@
                           </label>
                           <div class="col-sm-10">
                             <input type="number" class="form-control" id="price" 
-                                   name="price" placeholder="0"
+                                   name="price" placeholder="0" required
                                    value="<c:out value='${product.getPrice()}' />">
                           </div>
                         </div>
@@ -70,7 +70,7 @@
                           </label>
                           <div class="col-sm-10">
                             <input type="number" class="form-control" id="stock" 
-                                   name="stock" placeholder="0"
+                                   name="stock" placeholder="0" required
                                    value="<c:out value='${product.getStock()}' />">
                           </div>
                         </div>

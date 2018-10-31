@@ -19,7 +19,7 @@
                           Category
                       </label>
                       <div class="col-sm-10">
-                          <select class="form-control" name="category">
+                          <select class="form-control" name="category" required>
                               <option value="">Please select categories</option>
                               <option value="1">1</option>
                               <option value="2">2</option>
@@ -33,7 +33,7 @@
                       </label>
                       <div class="col-sm-10">
                         <input type="text" class="form-control" id="name" 
-                               name="name" placeholder="Input Your Name">
+                               name="name" placeholder="Input Your Name" required>
                       </div>
                     </div>
                     <div class="form-group row">
@@ -42,7 +42,7 @@
                       </label>
                       <div class="col-sm-10">
                         <input type="number" class="form-control" id="price" 
-                               name="price" placeholder="0">
+                               name="price" placeholder="0" required>
                       </div>
                     </div>
                     <div class="form-group row">
@@ -51,7 +51,7 @@
                       </label>
                       <div class="col-sm-10">
                         <input type="number" class="form-control" id="stock" 
-                               name="stock" placeholder="0">
+                               name="stock" placeholder="0" required>
                       </div>
                     </div>
                     <div class="form-group row">
