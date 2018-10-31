@@ -200,6 +200,9 @@ public class ProductsController extends HttpServlet {
 
     private void searchProduct(HttpServletRequest request, HttpServletResponse response) 
         throws ServletException, IOException {
+        Product p = new Product();
+        List<Product> products = p.all();
+        request.setAttribute("products", products);
         RequestDispatcher dispatcher = request.getRequestDispatcher("products/search.jsp");
         dispatcher.forward(request, response);
     }

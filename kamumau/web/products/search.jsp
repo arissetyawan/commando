@@ -16,7 +16,7 @@
                         <div class="card-body">
                             <h5 class="card-title">${products.name}</h5>
                             <p class="card-text">
-                                Category : ${products.category_name}
+                                Category : 
                             </p>
                           <a href="#" class="card-link">Rp ${products.price}</a>
                           <a href="#" class="btn btn-success btn-sm float-right">
