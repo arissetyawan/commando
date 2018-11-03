@@ -1,7 +1,7 @@
 
 body{
 
-   
+   background-color: ghostwhite;
     overflow: hidden;
     text-align: center;
     width: 100%;
@@ -12,18 +12,17 @@ body{
 
 table, th, td {
     border: 1px solid #bbb;
-    border-collapse: collapse; 
+    border-collapse: inherit ; 
     margin: 0px auto;
-    padding: 5px;
+ background-color: whitesmoke;
     width: 1080px;
-  font-family: sansserif;  
-    
-
-    
-    
+    vertical-align: middle;
+  font-family: sans-serif;  
+}
+td{
+top: 10px;
 }
 th{
-    padding: 5px;
    
     text-align: center;
     background-color: #ec407a;
@@ -32,6 +31,7 @@ th{
 
 /* Style the tab */
 .tab {
+    
     overflow: hidden;
     border: 1px solid #ccc;
     background-color: #f1f1f1;
@@ -65,5 +65,10 @@ th{
     padding: 6px 12px;
     border: 1px solid #ccc;
     border-top: none;
+}
+.user
+{
+    margin-top: 20px;
+
 }
 

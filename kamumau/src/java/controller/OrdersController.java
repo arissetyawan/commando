@@ -21,7 +21,9 @@ import model.Order;
  * @author x201
  */
 public class OrdersController extends HttpServlet {
-
+ private String message= "";
+ private String cs_name= "";
+ int id;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -33,28 +35,38 @@ public class OrdersController extends HttpServlet {
      */
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
             try (PrintWriter out = response.getWriter()) {
                 String action = request.getParameter("action");
                 if(action==null){
-                    action= "list";
+                    action= "";
                 }
                 try {
                     switch (action) {
-                    case "new":
+                    case "list":
+                        listOrders(request, response);
                         break;
                     case "create":
                         break;
                     case "delete":
+                        deleteOrders(request, response);
                         break;
                     case "edit":
                         editOrders(request, response);
                         break;
-                    case "update":
+                    case "cart":
+                        cart(request, response);
+                        break;
+                    case "user":
+                        users(request, response);
+                        break;
+                    case "complete":
+                        listComplete(request, response);
                         break;
                     default:
-                        listOrders(request, response);
+                        notfound(request, response);
                         break;
                     }
                 } 
@@ -68,7 +80,8 @@ public class OrdersController extends HttpServlet {
     private void listOrders(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
           Order o= new Order();
-        List<Order> orders = o.all();
+        List<Order> orders = o.all(id);
+        
         request.setAttribute("orders", orders);
         RequestDispatcher dispatcher = request.getRequestDispatcher("orders/list.jsp");
         dispatcher.forward(request, response);
@@ -76,9 +89,9 @@ public class OrdersController extends HttpServlet {
         private void listComplete(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
           Order o= new Order();
-        List<Order> orders = o.complete();
+        List<Order> orders = o.complete(id);
         request.setAttribute("orders", orders);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("orders/list.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("orders/complete.jsp");
         dispatcher.forward(request, response);
     }
         
@@ -130,4 +143,40 @@ public class OrdersController extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher("orders/edit.jsp");
         dispatcher.forward(request, response);
     }
+        private void deleteOrders(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+         Order o = new Order();
+        int no = Integer.parseInt(request.getParameter("no"));
+        o.delete(no);   
+            cs_name = "person deleted";  
+             request.setAttribute("cs_name", cs_name);
+     request.getRequestDispatcher("orders?action=list").include(request, response);
+    }
+        
+    private void users(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+         Order o = new Order();
+        id = Integer.parseInt(request.getParameter("user"));
+        o.user(id);
+        cs_name = "you are login as "+o.csname; 
+        request.setAttribute("cs_name", cs_name);
+     request.getRequestDispatcher("orders?action=list").include(request, response);
+    }
+    
+    private void notfound(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException 
+    {
+         RequestDispatcher dispatcher = request.getRequestDispatcher("orders/notfound.jsp");
+        dispatcher.forward(request, response);
+    }
+    
+    private void cart(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        Order o= new Order();
+        List<Order> orders = o.cart(id);
+        request.setAttribute("orders", orders);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("orders/cart.jsp");
+        dispatcher.forward(request, response);
+    }
+    
 }

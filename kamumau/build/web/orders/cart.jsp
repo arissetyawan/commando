@@ -13,7 +13,7 @@
     <body>
         <%
     String myVar= Order.csname;
-%>       
+%>             
  <hr style="color: black; padding: 1px;">
     <form action="orders?action=user" method="POST">
         <select class="user" name="user">
@@ -25,10 +25,7 @@
         <button type="submit" name="user2">ok</button>
     </form> <p style="position:absolute;top:10%; left:2%;font-family: Courier; font-size: 13px;">
         welcome : <c:out value="<%=myVar%>" /></p>
-     <c:set var="test" value='${cs_name}' />
-
-
-
+    <c:set var="test" value='${cs_name}' />
  <script>
      if('${test}'==="")
      {}
@@ -39,25 +36,29 @@
      }
  </script>
          
-  
+   
      <div class="tab">
-         <button class="tablinks"  onclick="openCity(event, 'Incoming')" id="defaultOpen">Incoming Orders</button>
-  <button class="tablinks" onclick="window.location.href = 'orders?action=complete' ">Complete Orders</button> 
-  <button class="tablinks"  onclick="window.location.href = 'orders?action=cart' ">My Cart</button> 
+         <button class="tablinks"   onclick="window.location.href = 'orders?action=list'" >Incoming Orders</button>
+  <button class="tablinks"  onclick="window.location.href = 'orders?action=complete'" >Complete Orders</button> 
+  <button class="tablinks" onclick="openCity(event, 'My_Cart')" id="defaultOpen" >My Cart</button> 
 </div>
-    <div style="height: 20%;" id="Complete" class="tabcontent">
+    <div style="height: 20%;" id="My_Cart" class="tabcontent">
+       
     <hr> 
+      <a style="color:black; position: absolute; text-align: left; font-size: 22px; left:5px;" 
+           href="orders?action=add"><i style="color: black; font-size: 30px;" class="material-icons">add</i>Add Order</a>
     <div>
-        
+      
 <table style="position:relative;" class="highlight">
         <thead>
             <tr >
           <th style=" border-right:1px solid #bbb;" data-field="id">ID</th>
               <th style=" border-right:1px solid #bbb;" data-field="no">No.</th>
-              <th style=" border-right:1px solid #bbb;" data-field="name">Buyer ID</th>
-              <th style=" border-right:1px solid #bbb;" data-field="date">Created At</th>
+              <th style=" border-right:1px solid #bbb;" data-field="product">Product Name</th>
+              <th style=" border-right:1px solid #bbb;" data-field="name">Seller Name</th>
+              <th style=" border-right:1px solid #bbb;" data-field="date">Qty</th>
               <th style=" border-right:1px solid #bbb;" data-field="status">Status</th>
-              <th style=" width: 25%;border-right:1px solid #bbb;" colspan="2" data-field="action">Action</th>
+              <th style="width: 25%;border-right:1px solid #bbb;" colspan="2" data-field="action">Action</th>
           </tr>
           </tr>
         </thead>
@@ -65,15 +66,16 @@
             <tr>
  <td><c:out value="${orders.id}" /></td>
  <td><c:out value="${orders.no}" /></td>
- <td><c:out value="${orders.byid}" /></td>
- <td><c:out value="${orders.created_at}" /></td>
+ <td><c:out value="${orders.productname}" /></td>
+ <td><c:out value="${orders.sname}" /></td>
+ <td><c:out value="${orders.qty}" /></td>
  <td><c:out value="${orders.status}" /></td>
 
 <td style="text-align: center;"  >
   <a   href="orders?action=edit&no=<c:out value='${orders.getNo()}' />"><i class="material-icons">visibility</i></a>
 </td>
  <td style="text-align: center;">       
- <a style="color: red;" href="orders?action=delete&no=<c:out value='${orders.getNo()}' />" onclick="return confirm('Are you sure?')" ><i class="material-icons">delete</i></a>                                          
+     <a  href="orders?action=delete&no=<c:out value='${orders.getNo()}' />" onclick="return confirm('Are you sure?')" ><i style="position: relative; color: red;" class="material-icons">delete</i></a>                                          
 </td>  
             </tr>
          </c:forEach>
@@ -84,8 +86,6 @@
 <div id="Incoming" class="tabcontent" >
 <div>
     <hr>
-     <a style="color:black; position: absolute; text-align: left; font-size: 22px; left:5px;" 
-           href="orders?action=add"><i style="color: black; font-size: 30px;" class="material-icons">add</i>Add Order</a>
     <br>
 <table style="position:relative" class="highlight">
 
@@ -94,29 +94,27 @@
 
           <th style=" border-right:1px solid #bbb;" data-field="id">ID</th>
               <th style=" border-right:1px solid #bbb;" data-field="no">No.</th>
-              <th style=" border-right:1px solid #bbb;" data-field="name">Buyer name</th>
+              <th style=" border-right:1px solid #bbb;" data-field="name">Buyer ID</th>
               <th style=" border-right:1px solid #bbb;" data-field="date">Created At</th>
               <th style=" border-right:1px solid #bbb;" data-field="status">Status</th>
               <th style=" width: 25%;border-right:1px solid #bbb;" colspan="2" data-field="action">Action</th>
           </tr>
         </thead>
-        <% int a=1; %>
               <c:forEach var="orders" items="${orders}">
-                 
                                 <tr>
-         <td><c:out value='<%=a%>' /></td>
+     <td><c:out value="${orders.id}" /></td>
  <td><c:out value="${orders.no}" /></td>
- <td><c:out value="${orders.byname}" /></td>
+ <td><c:out value="${orders.byid}" /></td>
  <td><c:out value="${orders.created_at}" /></td>
  <td><c:out value="${orders.status}" /></td>
 
 <td style="text-align: center;"  >
   <a   href="orders?action=edit&no=<c:out value='${orders.getNo()}' />"><i class="material-icons">visibility</i></a>
 </td>
- <td style="text-align: center; ">       
-     <a style="color: red; " href="orders?action=delete&no=<c:out value='${orders.getNo()}' />" onclick="return confirm('Are you sure?')" ><i style="position: relative;" class="material-icons">delete</i></a>                                          
+ <td style="text-align: center;">       
+ <a style="color: red;" href="orders?action=delete&no=<c:out value='${orders.getNo()}' />" onclick="return confirm('Are you sure?')" ><i class="material-icons">close</i></a>                                          
 </td>  
-</tr> <% a++; %>
+</tr>
          </c:forEach>
                 
                   

@@ -13,6 +13,7 @@
  */
 package model;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -26,11 +27,11 @@ public class Order extends MyConnection{
     public int user_id;
     public String created_at;
     public String updated_at;
-    public String status;
+    public String status, sname;
     public String address;
-    public String name, csname;
-    public int price, QTY;
-    public int buyer_id;
+    public static String name, csname, nim, byname, productname;
+    public int price, qty, productid, slid;
+    public int byid;
    
     
     /* this constructor defined 
@@ -53,14 +54,41 @@ public class Order extends MyConnection{
     public void setId(int id) {
         this.id = id;
     }
-        public int getQTY() {
-        return id;
+        public int getqty() {
+        return qty;
     }
 
-    public void setQTY(int QTY) {
-        this.QTY = QTY;
+    public void setqty(int qty) {
+        this.qty = qty;
+    }
+    public int getproductid() {
+        return productid;
     }
 
+    public void setproductid(int productid) {
+        this.productid = productid;
+    }
+    public String getproductname() {
+        return productname;
+    }
+
+    public void setproductname(String productname) {
+        this.productname = productname;
+    }
+
+    public String getsname() {
+        return sname;
+    }
+
+    public void setsname(String sname) {
+        this.sname = sname;
+    }
+    
+    
+    
+    
+    
+    
     public int getNo() {
         return no;
     }
@@ -79,6 +107,7 @@ public class Order extends MyConnection{
     public void setStatus(String status) {
         this.status= status;
     }
+
 
     private String generateDate(){
         Date date= new Date();
@@ -116,6 +145,18 @@ public class Order extends MyConnection{
     public void setcsname(String csname) {
         this.csname = csname;
     }
+        public String getbyname() {
+        return byname;
+    }
+    public void setbyname(String byname) {
+        this.byname = byname;
+    }
+            public int getbyid() {
+        return byid;
+    }
+    public void setbyid(int byid) {
+        this.byid = byid;
+    }
     
     public String getAddress() {
         return address;
@@ -131,60 +172,66 @@ public class Order extends MyConnection{
     public void setPrice(int price) {
         this.price = price;
     }
+    public int getslid() {
+        return slid;
+    }
+    public void setslid(int slid) {
+        this.slid = slid;
+    } 
     
     
     
     
-    
-    public ArrayList<Order> all(){
-        
-        String query = "SELECT * FROM " + tableName;
+   public ArrayList<Order> all(int user_id){
+        String query = "SELECT o.no as no, o.created_at as created_at, o.updated_at as updated_at, "
+                + " u.full_name, o.status as status  FROM " + tableName  
+                + " o inner join user u on "
+                + "o.id_buyer = u.id  WHERE o.id_user = " + user_id + " and o.status = 'new' ";
+        System.out.println(query);
         ArrayList<Order> orders = new ArrayList<>();
         try {
             Statement stmt = this.conn().createStatement();
             ResultSet res = stmt.executeQuery(query);
             while (res.next()) {
                 Order order = new Order();
-                
-              order.setId(res.getInt("id"));
-              order.setNo(res.getInt("buyer_id"));
-               order.setcsname(res.getString("csname"));
-               order.setAdress(res.getString("address"));
-            order.setPrice(res.getInt("price"));
-            order.setStatus(res.getString("status"));
-             order.setCreated_at( res.getString("created_at"));
-               order.setUpdated_at(res.getString("updated_at"));
-               
-                
+                order.setNo(res.getInt("no"));
+                order.setCreated_at(res.getString("created_at"));
+                order.setUpdated_at(res.getString("updated_at"));    
+                order.setStatus(res.getString("status"));
+                order.setbyname(res.getString("full_name"));
                 orders.add(order);
+               
             }
-        } catch (SQLException e) {
+                        
+        }
+        
+        catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return orders;
-    }
-       public ArrayList<Order> complete(){
         
-        String query = "SELECT * FROM " + tableName +"where status = 'delivered' " ;
-        ArrayList<Order> orders = new ArrayList<>();
+    }
+   public ArrayList<Order> complete(int user_id){
+               String query = "SELECT o.no as no, o.created_at as created_at, o.updated_at as updated_at, "
+                + " u.full_name , o.id as id, o.status as status  FROM " + tableName  
+                + " o inner join user u on "
+                + "o.id_buyer = u.id  WHERE o.id_user = " + user_id + " and o.status = 'paid' ORDER BY o.no DESC";
+       
+       ArrayList<Order> orders = new ArrayList<>();
         try {
             Statement stmt = this.conn().createStatement();
             ResultSet res = stmt.executeQuery(query);
             while (res.next()) {
                 Order order = new Order();
-                
-              order.setId(res.getInt("id"));
-              order.setNo(res.getInt("buyer_id"));
-               order.setName(res.getString("csname"));
-               order.setAdress(res.getString("address"));
-            order.setPrice(res.getInt("price"));
-            order.setStatus(res.getString("status"));
-             order.setCreated_at( res.getString("created_at"));
-               order.setUpdated_at(res.getString("updated_at"));
-               
-                
+                order.setNo(res.getInt("no"));
+                order.setCreated_at(res.getString("created_at"));
+                order.setUpdated_at(res.getString("updated_at"));
+                order.setbyname(res.getString("full_name"));
+                order.setId(res.getInt("id"));
+                order.setStatus(res.getString("status"));
                 orders.add(order);
             }
+            
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -218,24 +265,26 @@ public class Order extends MyConnection{
         return false;
     }
     
-    public boolean delete() {
-        return false;
+   public void delete(int no) {
+        String query = "DELETE FROM " + tableName + " WHERE no = " +no + " ";
+        try {
+            PreparedStatement pst = this.conn().prepareStatement(query);
+            pst.execute();
+           
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        
+        }  
     }
     
     public Order findByOrderNo(int no){
-        String query = "SELECT * FROM " + tableName + " WHERE no = " + no + " ";
+        String query = "SELECT no FROM " + tableName + " WHERE no = " + no + " ";
         Order order = new Order();
         try {
             Statement stmt = this.conn().createStatement();
             ResultSet res = stmt.executeQuery(query);
             if (res.next()) {
-                order.setId(res.getInt("id"));
                 order.setNo(res.getInt("no"));
-    
-                order.setUser(res.getInt("user_id"));
-                order.setStatus(res.getString("status"));
-                order.setCreated_at(res.getString("created_at"));
-                order.setUpdated_at(res.getString("updated_at"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -254,7 +303,7 @@ public class Order extends MyConnection{
               order.setId(res.getInt("id"));
                order.setName(res.getString("name"));
                order.setAdress(res.getString("address"));
-               order.setQTY(res.getInt("QTY"));
+               order.setqty(res.getInt("qty"));
             order.setPrice(res.getInt("price"));
             order.setStatus(res.getString("status"));
              order.setCreated_at( res.getString("created_at"));
@@ -306,4 +355,61 @@ public class Order extends MyConnection{
         }
         return false;
     }
+    
+    public void user(int id)
+    {
+        String query =  "SELECT ID,full_name FROM user where id = " +id;
+        Order order = new Order();
+        try {
+           Statement stmt = this.conn().createStatement();
+           ResultSet res = stmt.executeQuery(query);
+           while(res.next())
+           {
+               order.setUser(res.getInt("id"));
+               order.setcsname(res.getString("full_name"));
+               System.out.println(order.getId());   
+               System.out.println(order.getcsname()); 
+           }
+            
+            
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
+        public ArrayList<Order> cart(int id)
+     {
+         String query = "SELECT t.id as id, t.order_id as order_id, u.full_name as id_seller, p.name as product_id, "
+                 + "t.status as status, t.qty as qty"
+                 + "  FROM TRANSACTIONS t inner join user u "
+                 + "on t.id_seller = u.id "
+                 + "inner join products p "
+                 + "on p.id = t.product_id where t.id_buyer = "+id;
+         
+          ArrayList<Order> orders = new ArrayList<>();
+         try
+         {   System.out.println(query);
+             Statement stmt = this.conn().createStatement();
+             ResultSet rs = stmt.executeQuery(query);
+             while(rs.next())
+             {   Order order = new Order();
+                 order.setsname(rs.getString("id_seller"));
+                 
+                 order.setId(rs.getInt("id"));
+                 order.setNo(rs.getInt("order_id"));
+                 order.setqty(rs.getInt("qty"));
+                 order.setStatus(rs.getString("status"));
+                 order.setproductname(rs.getString("product_id"));
+                 orders.add(order);
+             }
+         }
+         catch(SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
+         return orders;
+     }
+  
+
 }
