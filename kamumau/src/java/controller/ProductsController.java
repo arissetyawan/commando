@@ -8,6 +8,7 @@ package controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -61,6 +62,9 @@ public class ProductsController extends HttpServlet {
                         break;
                     case "list":
                         listProduct(request, response);
+                        break;
+                    case "search":
+                        searchProduct(request, response);
                         break;
                     default:
                         searchProduct(request, response);
@@ -142,8 +146,24 @@ public class ProductsController extends HttpServlet {
         }
     }
 
-    private void deleteProduct(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void deleteProduct(HttpServletRequest request, HttpServletResponse response)
+        throws SQLException, IOException, ServletException {
+        
+        int id = Integer.valueOf(request.getParameter("id"));
+        Product product = new Product();
+        if(product.checkTransaction(id) < 1){
+            if (product.delete(id)){
+                message = "product deleted";                    
+                request.setAttribute("message", message);
+                response.sendRedirect("products?action=list");
+            }
+            else{
+                message= "product failed to deleted "+id;
+                request.setAttribute("message", message);
+                request.getRequestDispatcher("products?action=edit&id="+id).include(request, response);
+            }
+        }
+        
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
@@ -172,36 +192,46 @@ public class ProductsController extends HttpServlet {
         product.setCategory_id(category_id);
         product.setPrice(price);
         product.setStock(stock);
+        
         if (product.update()){
-            message= "product updated";     
+            message = "product updated";                    
             request.setAttribute("message", message);
-            List<Product> products = product.all();
-            request.setAttribute("products", products);
-//            request.getRequestDispatcher("/products/list.jsp").include(request, response);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("products?action=list");
-            dispatcher.forward(request, response);
+            response.sendRedirect("products?action=list");
         }
         else{
-            message= "product failed to updated";     
+            message= "product failed to updated";
             request.setAttribute("message", message);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("products?action=edit");
-            dispatcher.forward(request, response);
+            request.getRequestDispatcher("products?action=edit&id="+id).include(request, response);
         }
     }
 
     private void listProduct(HttpServletRequest request, HttpServletResponse response)
         throws SQLException, IOException, ServletException {
+        String stock = request.getParameter("stock");
         Product p = new Product();
-        int no = 1;
-        List<Product> products = p.all();
+        List<Product> products = new ArrayList<>();
+        if(stock == null){
+            products = p.all();
+        } else{
+            products = p.outofStockProduct(stock);
+        }
         request.setAttribute("products", products);
-        request.setAttribute("no", no);
         RequestDispatcher dispatcher = request.getRequestDispatcher("products/list.jsp");
         dispatcher.forward(request, response);
     }
 
     private void searchProduct(HttpServletRequest request, HttpServletResponse response) 
         throws ServletException, IOException {
+        String key = request.getParameter("key");
+        Product p = new Product();
+        List<Product> products = new ArrayList<>();
+        if(key==null){
+            products = p.all();
+        } else{
+            products = p.findProduct(key);
+        }
+        
+        request.setAttribute("products", products);
         RequestDispatcher dispatcher = request.getRequestDispatcher("products/search.jsp");
         dispatcher.forward(request, response);
     }

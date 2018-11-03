@@ -21,25 +21,13 @@
                               Category
                           </label>
                           <div class="col-sm-10">
-                              <select class="form-control" name="category">
+                              <select class="form-control" name="category" required>
                                   <option value="">Please select categories</option>
                                   <option value="1"
                                         <c:if test="${product.getCategory_id() == 1}">
                                            selected
                                         </c:if>>
-                                    1
-                                  </option>
-                                  <option value="2"
-                                        <c:if test="${product.getCategory_id() == 2}">
-                                           selected
-                                        </c:if>>
-                                    2
-                                  </option>
-                                  <option value="3"
-                                        <c:if test="${product.getCategory_id() == 3}">
-                                           selected
-                                        </c:if>>
-                                    3
+                                    Laptop
                                   </option>
                               </select>
                           </div>
@@ -50,7 +38,7 @@
                           </label>
                           <div class="col-sm-10">
                             <input type="text" class="form-control" id="name" 
-                                   name="name" placeholder="Input Your Name"
+                                   name="name" placeholder="Input Your Name" required
                                    value="<c:out value='${product.getName()}' />">
                           </div>
                         </div>
@@ -60,7 +48,7 @@
                           </label>
                           <div class="col-sm-10">
                             <input type="number" class="form-control" id="price" 
-                                   name="price" placeholder="0"
+                                   name="price" placeholder="0" required
                                    value="<c:out value='${product.getPrice()}' />">
                           </div>
                         </div>
@@ -70,7 +58,7 @@
                           </label>
                           <div class="col-sm-10">
                             <input type="number" class="form-control" id="stock" 
-                                   name="stock" placeholder="0"
+                                   name="stock" placeholder="0" required
                                    value="<c:out value='${product.getStock()}' />">
                           </div>
                         </div>
@@ -79,7 +67,8 @@
                             <button type="submit" class="btn btn-success">
                                 Update
                             </button> &nbsp;
-                            <a href="javascript:void(0)" class="btn btn-danger">
+                            <a href="javascript:void(0)" class="btn btn-danger" 
+                               onclick="deleteProduct('<c:out value='${product.getId()}' />')">
                                 Hapus ?
                             </a>
                           </div>
@@ -91,5 +80,14 @@
         </div>
     </div>
 </main>
+                                
+<script>
+    function deleteProduct(id){
+        var y = confirm('Are you sure ?');
+        if(y){
+            window.location.href = 'products?action=delete&id='+id;
+        }
+    }
+</script>
 
 <%@include file= "/layouts/footer.html" %>

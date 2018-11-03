@@ -15,8 +15,12 @@
             <a href="products?action=new" class="btn btn-success">
                 <i class="fa fa-plus"></i> Add Product
             </a>&nbsp;
-            <button class="btn btn-primary">My Products</button> &nbsp;            
-            <button class="btn btn-danger">Out of Stock Products</button>
+            <a href="products?action=list" class="btn btn-primary">
+                My Products
+            </a> &nbsp;            
+            <a href="products?action=list&stock=out" class="btn btn-danger">
+                Out of Stock Products
+            </a>
         </div>
         <br>
         <table class="table table-bordered table-striped table-hover">
@@ -31,9 +35,16 @@
               </tr>
             </thead>
             <tbody>
+                <c:if test="${empty products}">
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            <i>Tidak Ada Data</i>
+                        </td>
+                    </tr>
+                </c:if>
               <c:forEach var="products" items="${products}">
                   <tr>
-                    <th scope="row">${products.id}</th>
+                    <td scope="row">${products.id}</td>
                     <td>${products.name}</td>
                     <td>${products.price}</td>
                     <td>${products.stock}</td>

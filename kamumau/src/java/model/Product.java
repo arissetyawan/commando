@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author fredd
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 public class Product extends MyConnection{
     private final String tableName= "products";
     public int id, user_id, price, stock, category_id;
-    public String name;
+    public String name, categoryName;
     public String created_at, updated_at;
 
     public int getId() {
@@ -66,6 +67,14 @@ public class Product extends MyConnection{
     public void setName(String name) {
         this.name = name;
     }
+    
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
 
     public String getCreated_at() {
         return created_at;
@@ -112,7 +121,10 @@ public class Product extends MyConnection{
     }
     
     public ArrayList<Product> all(){
-        String query = "SELECT * FROM " + tableName;
+        String query = "SELECT products.*, categories.name AS category_name "
+                + "FROM "+tableName+" LEFT JOIN categories "
+                + "ON categories.id = products.category_id "
+                + "WHERE products.stock>0";
         ArrayList<Product> products = new ArrayList<>();
         try {
             Statement stmt = this.conn().createStatement();
@@ -125,6 +137,7 @@ public class Product extends MyConnection{
                 product.setPrice(res.getInt("price"));
                 product.setStock(res.getInt("stock"));
                 product.setCategory_id(res.getInt("category_id"));
+                product.setCategoryName(res.getString("category_name"));
                 product.setUpdated_at(res.getString("updated_at"));
                 products.add(product);
             }
@@ -133,6 +146,34 @@ public class Product extends MyConnection{
         }
         return products;
     }
+    
+    public ArrayList<Product> findProduct(String key){
+        String query = "SELECT products.*, categories.name AS category_name "
+                + "FROM "+tableName+" LEFT JOIN categories "
+                + "ON categories.id = products.category_id "
+                + "WHERE products.stock > 0 AND products.name like '%"+key+"%'";
+        ArrayList<Product> products = new ArrayList<>();
+        try {
+            Statement stmt = this.conn().createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            while (res.next()) {
+                Product product = new Product();
+                product.setId(res.getInt("id"));
+                product.setUser_id(res.getInt("user_id"));
+                product.setName(res.getString("name"));
+                product.setPrice(res.getInt("price"));
+                product.setStock(res.getInt("stock"));
+                product.setCategory_id(res.getInt("category_id"));
+                product.setCategoryName(res.getString("category_name"));
+                product.setUpdated_at(res.getString("updated_at"));
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return products;
+    }
+    
 
     public Object find(int id) {
         Product product = new Product();
@@ -141,6 +182,7 @@ public class Product extends MyConnection{
             Statement stmt = this.conn().createStatement();
             ResultSet res = stmt.executeQuery(query);
             if (res.next()) {
+                product.setId(res.getInt("id"));
                 product.setName(res.getString("name"));
                 product.setPrice(res.getInt("price"));
                 product.setStock(res.getInt("stock"));
@@ -168,6 +210,50 @@ public class Product extends MyConnection{
             System.out.println(e.getMessage());
             return false;
         }
+    }
+
+    public List<Product> outofStockProduct(String stock) {
+        String query = "SELECT products.*, categories.name AS category_name "
+                + "FROM "+tableName+" LEFT JOIN categories "
+                + "ON categories.id = products.category_id "
+                + "WHERE products.stock=0";
+        ArrayList<Product> products = new ArrayList<>();
+        try {
+            Statement stmt = this.conn().createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            while (res.next()) {
+                Product product = new Product();
+                product.setId(res.getInt("id"));
+                product.setUser_id(res.getInt("user_id"));
+                product.setName(res.getString("name"));
+                product.setPrice(res.getInt("price"));
+                product.setStock(res.getInt("stock"));
+                product.setCategory_id(res.getInt("category_id"));
+                product.setCategoryName(res.getString("category_name"));
+                product.setUpdated_at(res.getString("updated_at"));
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return products;
+    }
+
+    public boolean delete(int id) {
+        String query = "DELETE FROM "+ tableName +
+                " WHERE id='"+id+"'";
+        try {
+            Statement stmt = this.conn().createStatement();
+            return stmt.executeUpdate(query) > 0 ? true:false;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+    
+    public int checkTransaction(int id){
+        //just for example
+        return 0;
     }
     
 }
