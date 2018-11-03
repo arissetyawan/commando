@@ -21,9 +21,7 @@
                       <div class="col-sm-10">
                           <select class="form-control" name="category" required>
                               <option value="">Please select categories</option>
-                              <option value="1">1</option>
-                              <option value="2">2</option>
-                              <option value="3">3</option>
+                              <option value="1">Laptop</option>
                           </select>
                       </div>
                     </div>

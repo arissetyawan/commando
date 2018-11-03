@@ -146,8 +146,24 @@ public class ProductsController extends HttpServlet {
         }
     }
 
-    private void deleteProduct(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void deleteProduct(HttpServletRequest request, HttpServletResponse response)
+        throws SQLException, IOException, ServletException {
+        
+        int id = Integer.valueOf(request.getParameter("id"));
+        Product product = new Product();
+        if(product.checkTransaction(id) < 1){
+            if (product.delete(id)){
+                message = "product deleted";                    
+                request.setAttribute("message", message);
+                response.sendRedirect("products?action=list");
+            }
+            else{
+                message= "product failed to deleted "+id;
+                request.setAttribute("message", message);
+                request.getRequestDispatcher("products?action=edit&id="+id).include(request, response);
+            }
+        }
+        
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
@@ -191,8 +207,14 @@ public class ProductsController extends HttpServlet {
 
     private void listProduct(HttpServletRequest request, HttpServletResponse response)
         throws SQLException, IOException, ServletException {
+        String stock = request.getParameter("stock");
         Product p = new Product();
-        List<Product> products = p.all();
+        List<Product> products = new ArrayList<>();
+        if(stock == null){
+            products = p.all();
+        } else{
+            products = p.outofStockProduct(stock);
+        }
         request.setAttribute("products", products);
         RequestDispatcher dispatcher = request.getRequestDispatcher("products/list.jsp");
         dispatcher.forward(request, response);

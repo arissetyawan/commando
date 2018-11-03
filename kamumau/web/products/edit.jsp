@@ -27,19 +27,7 @@
                                         <c:if test="${product.getCategory_id() == 1}">
                                            selected
                                         </c:if>>
-                                    1
-                                  </option>
-                                  <option value="2"
-                                        <c:if test="${product.getCategory_id() == 2}">
-                                           selected
-                                        </c:if>>
-                                    2
-                                  </option>
-                                  <option value="3"
-                                        <c:if test="${product.getCategory_id() == 3}">
-                                           selected
-                                        </c:if>>
-                                    3
+                                    Laptop
                                   </option>
                               </select>
                           </div>
@@ -79,7 +67,8 @@
                             <button type="submit" class="btn btn-success">
                                 Update
                             </button> &nbsp;
-                            <a href="javascript:void(0)" class="btn btn-danger">
+                            <a href="javascript:void(0)" class="btn btn-danger" 
+                               onclick="deleteProduct('<c:out value='${product.getId()}' />')">
                                 Hapus ?
                             </a>
                           </div>
@@ -91,5 +80,14 @@
         </div>
     </div>
 </main>
+                                
+<script>
+    function deleteProduct(id){
+        var y = confirm('Are you sure ?');
+        if(y){
+            window.location.href = 'products?action=delete&id='+id;
+        }
+    }
+</script>
 
 <%@include file= "/layouts/footer.html" %>
