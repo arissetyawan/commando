@@ -106,7 +106,7 @@
                                 <tr>
          <td><c:out value='<%=a%>' /></td>
  <td><c:out value="${orders.no}" /></td>
- <td><c:out value="${orders.byname}" /></td>
+ <td><c:out value="${orders.name}" /></td>
  <td><c:out value="${orders.created_at}" /></td>
  <td><c:out value="${orders.status}" /></td>
 

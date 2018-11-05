@@ -58,7 +58,7 @@
               <th style=" border-right:1px solid #bbb;" data-field="name">Seller Name</th>
               <th style=" border-right:1px solid #bbb;" data-field="date">Qty</th>
               <th style=" border-right:1px solid #bbb;" data-field="status">Status</th>
-              <th style="width: 25%;border-right:1px solid #bbb;" colspan="2" data-field="action">Action</th>
+              <th style="border-right:1px solid #bbb;" colspan="1" data-field="action">Action</th>
           </tr>
           </tr>
         </thead>
@@ -67,13 +67,13 @@
  <td><c:out value="${orders.id}" /></td>
  <td><c:out value="${orders.no}" /></td>
  <td><c:out value="${orders.productname}" /></td>
- <td><c:out value="${orders.sname}" /></td>
+ <td><c:out value="${orders.name}" /></td>
  <td><c:out value="${orders.qty}" /></td>
  <td><c:out value="${orders.status}" /></td>
 
-<td style="text-align: center;"  >
+<!-- <td style="text-align: center;"  >
   <a   href="orders?action=edit&no=<c:out value='${orders.getNo()}' />"><i class="material-icons">visibility</i></a>
-</td>
+</td> -->
  <td style="text-align: center;">       
      <a  href="orders?action=delete&no=<c:out value='${orders.getNo()}' />" onclick="return confirm('Are you sure?')" ><i style="position: relative; color: red;" class="material-icons">delete</i></a>                                          
 </td>  

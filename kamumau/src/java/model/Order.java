@@ -30,7 +30,7 @@ public class Order extends MyConnection{
     public String status, sname;
     public String address;
     public static String name, csname, nim, byname, productname;
-    public int price, qty, productid, slid;
+    public int price, qty, productid, slid,tbyid,tslid;
     public int byid;
    
     
@@ -178,13 +178,25 @@ public class Order extends MyConnection{
     public void setslid(int slid) {
         this.slid = slid;
     } 
+        public int gettslid() {
+        return tslid;
+    }
+    public void settslid(int tslid) {
+        this.tslid = tslid;
+    } 
+    public int gettbyid() {
+        return tbyid;
+    }
+    public void settbyid(int tbyid) {
+        this.tbyid = tbyid;
+    } 
     
     
     
     
    public ArrayList<Order> all(int user_id){
         String query = "SELECT o.no as no, o.created_at as created_at, o.updated_at as updated_at, "
-                + " u.full_name, o.status as status  FROM " + tableName  
+                + " u.full_name as full_name, o.status as status  FROM " + tableName
                 + " o inner join user u on "
                 + "o.id_buyer = u.id  WHERE o.id_user = " + user_id + " and o.status = 'new' ";
         System.out.println(query);
@@ -198,7 +210,7 @@ public class Order extends MyConnection{
                 order.setCreated_at(res.getString("created_at"));
                 order.setUpdated_at(res.getString("updated_at"));    
                 order.setStatus(res.getString("status"));
-                order.setbyname(res.getString("full_name"));
+                order.setName(res.getString("full_name"));
                 orders.add(order);
                
             }
@@ -211,6 +223,67 @@ public class Order extends MyConnection{
         return orders;
         
     }
+   
+   public ArrayList<Order> editincoming(int no){
+        String query = "SELECT o.no as no, o.created_at as created_at, o.updated_at as updated_at, "
+                + " u.full_name as full_name, o.status as status  FROM ORDERS "
+                + " o inner join user u on "
+                + "o.id_buyer = u.id  WHERE o.no = " +no + " and o.status = 'new' ";
+        System.out.println(query);
+        ArrayList<Order> orders = new ArrayList<>();
+        try {
+            Statement stmt = this.conn().createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            while (res.next()) {
+                Order order = new Order();
+                order.setNo(res.getInt("no"));
+                order.setCreated_at(res.getString("created_at"));
+                order.setUpdated_at(res.getString("updated_at"));    
+                order.setStatus(res.getString("status"));
+                order.setName(res.getString("full_name"));
+                orders.add(order);              
+            }
+                        
+        }
+        
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return orders;
+        
+    }
+   
+   public ArrayList<Order> editcomplete(int no){
+        String query = "SELECT o.no as no, o.created_at as created_at, o.updated_at as updated_at, "
+                + " u.full_name as full_name, o.status as status  FROM ORDERS "
+                + " o inner join user u on "
+                + "o.id_buyer = u.id  WHERE o.no = " +no + " and o.status = 'paid' ";
+        System.out.println(query);
+        ArrayList<Order> orders = new ArrayList<>();
+        try {
+            Statement stmt = this.conn().createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            while (res.next()) {
+                Order order = new Order();
+                order.setNo(res.getInt("no"));
+                order.setCreated_at(res.getString("created_at"));
+                order.setUpdated_at(res.getString("updated_at"));    
+                order.setStatus(res.getString("status"));
+                order.setName(res.getString("full_name"));
+                orders.add(order);              
+            }
+                        
+        }
+        
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return orders;
+        
+    }
+   
+   
+   
    public ArrayList<Order> complete(int user_id){
                String query = "SELECT o.no as no, o.created_at as created_at, o.updated_at as updated_at, "
                 + " u.full_name , o.id as id, o.status as status  FROM " + tableName  
@@ -226,7 +299,7 @@ public class Order extends MyConnection{
                 order.setNo(res.getInt("no"));
                 order.setCreated_at(res.getString("created_at"));
                 order.setUpdated_at(res.getString("updated_at"));
-                order.setbyname(res.getString("full_name"));
+                order.setName(res.getString("full_name"));
                 order.setId(res.getInt("id"));
                 order.setStatus(res.getString("status"));
                 orders.add(order);
@@ -267,6 +340,7 @@ public class Order extends MyConnection{
     
    public void delete(int no) {
         String query = "DELETE FROM " + tableName + " WHERE no = " +no + " ";
+        String query2 = "DELETE FROM transactions WHERE order_id = " +no + " ";
         try {
             PreparedStatement pst = this.conn().prepareStatement(query);
             pst.execute();
@@ -275,6 +349,14 @@ public class Order extends MyConnection{
             System.out.println(e.getMessage());
         
         }  
+                try {
+            PreparedStatement psd = this.conn().prepareStatement(query2);
+            psd.execute();
+           
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        
+        } 
     }
     
     public Order findByOrderNo(int no){
@@ -394,8 +476,7 @@ public class Order extends MyConnection{
              ResultSet rs = stmt.executeQuery(query);
              while(rs.next())
              {   Order order = new Order();
-                 order.setsname(rs.getString("id_seller"));
-                 
+                 order.setName(rs.getString("id_seller"));
                  order.setId(rs.getInt("id"));
                  order.setNo(rs.getInt("order_id"));
                  order.setqty(rs.getInt("qty"));
@@ -410,6 +491,78 @@ public class Order extends MyConnection{
         }
          return orders;
      }
-  
+    public void updatein(int no)
+    {
+     
+        String query =  "UPDATE ORDERS SET STATUS = 'paid' where no = " +no;
+         String query2 =  "UPDATE transactions SET STATUS = 'paid' where no = " +no;
+       
+        try {
+              PreparedStatement pst = this.conn().prepareStatement(query);
+            pst.execute();            
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }  
+                try {
+              PreparedStatement psd = this.conn().prepareStatement(query2);
+            psd.execute();            
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }   
+    }
+public void updatecom(int no)
+    {
+     
+        String query =  "UPDATE ORDERS SET STATUS = 'complete' where no = " +no;
+         String query2 =  "UPDATE transactions SET STATUS = 'paid' where no = " +no;
+       
+        try {
+              PreparedStatement pst = this.conn().prepareStatement(query);
+            pst.execute();            
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }  
+                try {
+              PreparedStatement psd = this.conn().prepareStatement(query2);
+            psd.execute();            
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }   
+    }
+public void addorders(){
+     String date= generateDate();
+        String status= "new";
+        this.setNo(Math.abs(this.generateNo()));     
+    String query = "INSERT INTO "+ tableName +"(no, id_user, id_buyer, status,created_at,updated_at) values ('" + this.no + "', '" + this.byid + "', '" + this.slid +"','" +status + "','" +date + 
+             "','" +date + "')";
+    String query2 = "INSERT INTO TRANSACTIONS "+"(order_id, product_id, id_seller, id_buyer, qty, status) values ('" + this.no + "', '" + this.productid + "', '" + this.tslid + "','" +this.tbyid + 
+             "','" +this.qty +"','" +status + "')";
+    System.out.println(query);
+    System.out.println("  ");
+    System.out.println(query2);
+    try {
+            PreparedStatement pst = this.conn().prepareStatement(query);
+            
+            pst.execute();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        
+        try {
+            PreparedStatement psd = this.conn().prepareStatement(query2);
+            
+            psd.execute();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+}
 
 }

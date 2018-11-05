@@ -24,6 +24,7 @@ public class OrdersController extends HttpServlet {
  private String message= "";
  private String cs_name= "";
  int id;
+ int no;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -49,12 +50,16 @@ public class OrdersController extends HttpServlet {
                         listOrders(request, response);
                         break;
                     case "create":
+                        create(request, response);
                         break;
                     case "delete":
                         deleteOrders(request, response);
                         break;
                     case "edit":
                         editOrders(request, response);
+                        break;
+                    case "editcom":
+                        edit(request, response);
                         break;
                     case "cart":
                         cart(request, response);
@@ -64,6 +69,15 @@ public class OrdersController extends HttpServlet {
                         break;
                     case "complete":
                         listComplete(request, response);
+                        break;
+                    case "add":
+                        add(request, response);
+                        break;
+                    case "updatein":
+                        updateinOrders(request, response);
+                        break;
+                    case "updatecom":
+                        updatecomOrders(request, response);
                         break;
                     default:
                         notfound(request, response);
@@ -80,8 +94,7 @@ public class OrdersController extends HttpServlet {
     private void listOrders(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
           Order o= new Order();
-        List<Order> orders = o.all(id);
-        
+        List<Order> orders = o.all(id);        
         request.setAttribute("orders", orders);
         RequestDispatcher dispatcher = request.getRequestDispatcher("orders/list.jsp");
         dispatcher.forward(request, response);
@@ -136,10 +149,19 @@ public class OrdersController extends HttpServlet {
     }// </editor-fold>
     private void editOrders(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-         Order o = new Order();
-        int no = Integer.parseInt(request.getParameter("no"));
-        List<Order> orders = o.find(no);
-         request.setAttribute("orders", orders);
+                no = Integer.parseInt(request.getParameter("no"));
+        Order o= new Order();
+        List<Order> orders = o.editincoming(no);
+        request.setAttribute("orders", orders);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("orders/edit.jsp");
+        dispatcher.forward(request, response);
+    }
+    private void edit(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+                no = Integer.parseInt(request.getParameter("no"));
+        Order o= new Order();
+        List<Order> orders = o.editcomplete(no);
+        request.setAttribute("orders", orders);
         RequestDispatcher dispatcher = request.getRequestDispatcher("orders/edit.jsp");
         dispatcher.forward(request, response);
     }
@@ -148,7 +170,7 @@ public class OrdersController extends HttpServlet {
          Order o = new Order();
         int no = Integer.parseInt(request.getParameter("no"));
         o.delete(no);   
-            cs_name = "person deleted";  
+            cs_name = "orders deleted";  
              request.setAttribute("cs_name", cs_name);
      request.getRequestDispatcher("orders?action=list").include(request, response);
     }
@@ -179,4 +201,48 @@ public class OrdersController extends HttpServlet {
         dispatcher.forward(request, response);
     }
     
+    private void add(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        Order o= new Order();
+        RequestDispatcher dispatcher = request.getRequestDispatcher("orders/add.jsp");
+        dispatcher.forward(request, response);
+    }
+            private void updateinOrders(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+         Order o = new Order();
+        int no = Integer.parseInt(request.getParameter("no"));
+        o.updatein(no);   
+            cs_name = "orders updated";  
+             request.setAttribute("cs_name", cs_name);
+     request.getRequestDispatcher("orders?action=edit").include(request, response);
+    }
+   
+    private void updatecomOrders(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+         Order o = new Order();
+        int no = Integer.parseInt(request.getParameter("no"));
+        o.updatecom(no);   
+            cs_name = "orders complete";  
+             request.setAttribute("cs_name", cs_name);
+     request.getRequestDispatcher("orders?action=edit").include(request, response);
+    }
+    private void create(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+        Order o = new Order();
+        int seller = Integer.parseInt(request.getParameter("id_seller"));
+        int productid = Integer.parseInt(request.getParameter("product"));
+        int qty = Integer.parseInt(request.getParameter("qty"));
+        
+    o.setslid(id);
+    o.setproductid(productid);
+    o.setqty(qty);
+    o.setbyid(seller);
+    o.settbyid(id);
+    o.settslid(seller);
+   
+                cs_name = "orders added to mycart";  
+             request.setAttribute("cs_name", cs_name);
+             o.addorders();
+    request.getRequestDispatcher("orders?action=cart").include(request, response);
+    }
 }

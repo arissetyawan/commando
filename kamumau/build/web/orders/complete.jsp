@@ -65,12 +65,12 @@
             <tr>
  <td><c:out value="<%=a%>" /></td>
  <td><c:out value="${orders.no}" /></td>
- <td><c:out value="${orders.byname}" /></td>
+ <td><c:out value="${orders.name}" /></td>
  <td><c:out value="${orders.created_at}" /></td>
  <td><c:out value="${orders.status}" /></td>
 
 <td style="text-align: center;"  >
-  <a   href="orders?action=edit&no=<c:out value='${orders.getNo()}' />"><i class="material-icons">visibility</i></a>
+  <a   href="orders?action=editcom&no=<c:out value='${orders.getNo()}' />"><i class="material-icons">visibility</i></a>
 </td>
  <td style="text-align: center;">       
  <a style="color: red;" href="orders?action=delete&no=<c:out value='${orders.getNo()}' />" onclick="return confirm('Are you sure?')" ><i class="material-icons">delete</i></a>                                          
